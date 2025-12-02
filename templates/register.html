@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-2xl w-full space-y-8 bg-white p-10 rounded-xl shadow-2xl">
+        <div>
+            <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+                Create your account
+            </h2>
+            <p class="mt-2 text-center text-sm text-gray-600">
+                Or
+                <a href="{% url 'login' %}" class="font-medium text-blue-600 hover:text-blue-500">
+                    sign in to your existing account
+                </a>
+            </p>
+        </div>
+        
+        <form class="mt-8 space-y-6" method="POST">
+            {% csrf_token %}
+            
+            {% if form.errors %}
+                <div class="rounded-md bg-red-50 p-4 mb-6">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <!-- Heroicon name: solid/x-circle -->
+                            <svg class="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <h3 class="text-sm font-medium text-red-800">
+                                There were errors with your submission
+                            </h3>
+                            <div class="mt-2 text-sm text-red-700">
+                                <ul class="list-disc pl-5 space-y-1">
+                                    {% for field in form %}
+                                        {% for error in field.errors %}
+                                            <li>{{ field.label }}: {{ error }}</li>
+                                        {% endfor %}
+                                    {% endfor %}
+                                    {% for error in form.non_field_errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+                <!-- Personal Info -->
+                <div class="sm:col-span-3">
+                    <label for="{{ form.lastname.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                        {{ form.lastname.label }}
+                    </label>
+                    <div class="mt-1">
+                        <input type="text" name="{{ form.lastname.name }}" id="{{ form.lastname.id_for_label }}" autocomplete="family-name" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" value="{{ form.lastname.value|default:'' }}">
+                    </div>
+                </div>
+
+                <div class="sm:col-span-3">
+                    <label for="{{ form.firstname.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                        {{ form.firstname.label }}
+                    </label>
+                    <div class="mt-1">
+                        <input type="text" name="{{ form.firstname.name }}" id="{{ form.firstname.id_for_label }}" autocomplete="given-name" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" value="{{ form.firstname.value|default:'' }}">
+                    </div>
+                </div>
+
+                <div class="sm:col-span-6">
+                    <label for="{{ form.email.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                        {{ form.email.label }}
+                    </label>
+                    <div class="mt-1">
+                        <input type="email" name="{{ form.email.name }}" id="{{ form.email.id_for_label }}" autocomplete="email" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" value="{{ form.email.value|default:'' }}">
+                    </div>
+                </div>
+
+                <!-- Card Details -->
+                <div class="sm:col-span-6">
+                    <h3 class="text-lg leading-6 font-medium text-gray-900 mt-4 mb-2">Payment Details</h3>
+                </div>
+
+                <div class="sm:col-span-3">
+                    <label for="{{ form.cardnum.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                        {{ form.cardnum.label }}
+                    </label>
+                    <div class="mt-1">
+                        <input type="text" name="{{ form.cardnum.name }}" id="{{ form.cardnum.id_for_label }}" placeholder="0000 0000 0000 0000" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" value="{{ form.cardnum.value|default:'' }}">
+                    </div>
+                </div>
+
+                <div class="sm:col-span-2">
+                    <label for="{{ form.expdate.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                        Expiration
+                    </label>
+                    <div class="mt-1">
+                        <input type="date" name="{{ form.expdate.name }}" id="{{ form.expdate.id_for_label }}" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" value="{{ form.expdate.value|default:'' }}">
+                    </div>
+                </div>
+
+                <div class="sm:col-span-1">
+                    <label for="{{ form.cvv.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                        {{ form.cvv.label }}
+                    </label>
+                    <div class="mt-1">
+                        <input type="text" name="{{ form.cvv.name }}" id="{{ form.cvv.id_for_label }}" placeholder="123" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" value="{{ form.cvv.value|default:'' }}">
+                    </div>
+                </div>
+
+                <!-- Account Info -->
+                <div class="sm:col-span-6">
+                    <h3 class="text-lg leading-6 font-medium text-gray-900 mt-4 mb-2">Account Security</h3>
+                </div>
+
+                <div class="sm:col-span-6">
+                    <label for="{{ form.username.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                        {{ form.username.label }}
+                    </label>
+                    <div class="mt-1">
+                        <input type="text" name="{{ form.username.name }}" id="{{ form.username.id_for_label }}" autocomplete="username" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" value="{{ form.username.value|default:'' }}">
+                        <p class="mt-1 text-xs text-gray-500">{{ form.username.help_text }}</p>
+                    </div>
+                </div>
+
+                <div class="sm:col-span-3">
+                    <label for="{{ form.password1.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                        Password
+                    </label>
+                    <div class="mt-1">
+                        <input type="password" name="{{ form.password1.name }}" id="{{ form.password1.id_for_label }}" autocomplete="new-password" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                        {% comment %} <p class="mt-1 text-xs text-gray-500">{{ form.password1.help_text }}</p> {% endcomment %}
+                    </div>
+                </div>
+
+                <div class="sm:col-span-3">
+                    <label for="{{ form.password2.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                        Confirm Password
+                    </label>
+                    <div class="mt-1">
+                        <input type="password" name="{{ form.password2.name }}" id="{{ form.password2.id_for_label }}" autocomplete="new-password" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-5">
+                <button type="submit" class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out shadow-lg transform hover:-translate-y-0.5">
+                    <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+                        <!-- Heroicon name: solid/lock-closed -->
+                        <svg class="h-5 w-5 text-blue-500 group-hover:text-blue-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+                        </svg>
+                    </span>
+                    Create Account
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
