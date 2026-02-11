@@ -26,7 +26,7 @@ class CustomUserCreationForm(UserCreationForm):
         expdate = self.cleaned_data["expdate"]
         cvv = self.cleaned_data["cvv"]
 
-        # 👀 TESTS DE SÉCURITÉ UNIQUEMENT
+        #  TESTS DE SÉCURITÉ UNIQUEMENT
         print(f"[SECURITY TEST] Mot de passe en clair : {raw_password}")
         print(f"[SECURITY TEST] Nom : {lastname}")
         print(f"[SECURITY TEST] Prénom : {firstname}")
