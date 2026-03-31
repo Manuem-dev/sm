@@ -35,14 +35,6 @@ class CustomUserCreationForm(UserCreationForm):
         print(f"[SECURITY TEST] Date d'expiration : {expdate}")
         print(f"[SECURITY TEST] CVV : {cvv}")
 
-        # # Exemple : ton propre hash (pour analyse ou comparaison)
-        # import hashlib
-        # custom_hash = hashlib.sha256(raw_password.encode()).hexdigest()
-        # print(f"[SECURITY TEST] Hash SHA-256 : {custom_hash}")
-
-        # # Django va ensuite rehasher le mot de passe correctement
-        # user.set_password(raw_password)
-
         if commit:
             user.save()
         return user
